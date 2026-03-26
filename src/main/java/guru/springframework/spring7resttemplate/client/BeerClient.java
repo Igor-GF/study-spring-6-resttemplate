@@ -1,7 +1,10 @@
 package guru.springframework.spring7resttemplate.client;
 
 import guru.springframework.spring7resttemplate.model.BeerDTO;
+import guru.springframework.spring7resttemplate.model.BeerStyle;
 import org.springframework.data.domain.Page;
+
+import java.util.UUID;
 
 /**
  * Created by jt, Spring Framework Guru.
@@ -9,14 +12,14 @@ import org.springframework.data.domain.Page;
 public interface BeerClient {
     Page<BeerDTO> listBeers();
 
-//    Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory,
-//                            Integer pageNumber,Integer pageSize);
-//
-//    BeerDTO getBeerById(UUID beerId);
-//
-//    BeerDTO createBeer(BeerDTO newDto);
-//
-//    BeerDTO updateBeer(BeerDTO beerDto);
-//
-//    void deleteBeer(UUID beerId);
+    Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory,
+                            Integer pageNumber, Integer pageSize);
+
+    BeerDTO getBeerById(UUID beerId);
+
+    BeerDTO createBeer(BeerDTO newDto);
+
+    BeerDTO updateBeer(BeerDTO beerDto);
+
+    void deleteBeer(UUID beerId);
 }
