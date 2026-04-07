@@ -56,6 +56,16 @@ public class BeerClientMockTest {
     BeerDTO beerDto;
     String dtoJson;
 
+    @BeforeEach
+    void setUp() throws JsonProcessingException {
+        RestTemplate restTemplate = restTemplateBuilderConfigured.build();
+        server = MockRestServiceServer.bindTo(restTemplate).build();
+        when(mockRestTemplateBuilder.build()).thenReturn(restTemplate);
+        beerClient = new BeerClientImpl(mockRestTemplateBuilder);
+        beerDto = getBeerDto();
+        dtoJson = objectMapper.writeValueAsString(beerDto);
+    }
+
     @Test
     void test_list_beers_with_query_param() throws JsonProcessingException {
         String response = objectMapper.writeValueAsString(getPage());
@@ -66,21 +76,12 @@ public class BeerClientMockTest {
 
         server.expect(method(HttpMethod.GET))
                 .andExpect(requestTo(uri))
+                .andExpect(header("Authorization", "Basic dXNlcjE6cGFzc3dvcmQ="))
                 .andExpect(queryParam("beerName", "ALE"))
                 .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
         Page<BeerDTO> responsePage = beerClient.listBeers("ALE", null, null, null, null);
         assertThat(responsePage.getContent().size()).isEqualTo(1);
-    }
-
-    @BeforeEach
-    void setUp() throws JsonProcessingException {
-        RestTemplate restTemplate = restTemplateBuilderConfigured.build();
-        server = MockRestServiceServer.bindTo(restTemplate).build();
-        when(mockRestTemplateBuilder.build()).thenReturn(restTemplate);
-        beerClient = new BeerClientImpl(mockRestTemplateBuilder);
-        beerDto = getBeerDto();
-        dtoJson = objectMapper.writeValueAsString(beerDto);
     }
 
     @Test
